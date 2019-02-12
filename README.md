@@ -2,9 +2,6 @@
 
 [![Build Status](https://travis-ci.org/hotsaucejake/laravel-coinigy.svg?branch=master)](https://travis-ci.org/hotsaucejake/laravel-coinigy)
 [![styleci](https://styleci.io/repos/CHANGEME/shield)](https://styleci.io/repos/CHANGEME)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/hotsaucejake/laravel-coinigy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/hotsaucejake/laravel-coinigy/?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/CHANGEME/mini.png)](https://insight.sensiolabs.com/projects/CHANGEME)
-[![Coverage Status](https://coveralls.io/repos/github/hotsaucejake/laravel-coinigy/badge.svg?branch=master)](https://coveralls.io/github/hotsaucejake/laravel-coinigy?branch=master)
 
 [![Packagist](https://img.shields.io/packagist/v/hotsaucejake/laravel-coinigy.svg)](https://packagist.org/packages/hotsaucejake/laravel-coinigy)
 [![Packagist](https://poser.pugx.org/hotsaucejake/laravel-coinigy/d/total.svg)](https://packagist.org/packages/hotsaucejake/laravel-coinigy)
