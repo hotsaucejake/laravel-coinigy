@@ -20,7 +20,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             'laravel-coinigy'
         );
 
-        $this->app->bind('laravel-coinigy', function() {
+        $this->app->bind('laravel-coinigy', function () {
             return new Coinigy();
         });
     }
