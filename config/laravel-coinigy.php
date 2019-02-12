@@ -26,8 +26,9 @@ return [
      */
 
     'urls' => [
-        'base'  => 'https://api.coinigy.com/api/v2/',
-        'public'  => 'https://api.coinigy.com/api/v2/public/',
-        'private'  => 'https://api.coinigy.com/api/v2/',
+        'api' => 'https://api.coinigy.com',
+        'base'  => '/api/v2/',
+        'public'  => 'public/',
+        'private'  => 'private/',
     ],
 ];
