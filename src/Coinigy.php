@@ -42,7 +42,7 @@ class Coinigy
         ]);
     }
 
-    private function publicGetRequest($endpoint = 'status', array $parameters = [])
+    private function publicGetRequest($endpoint = 'status')
     {
         $response = $this->client->get($this->public_url.$endpoint);
         $result = json_decode($response->getBody()->getContents(), true);
@@ -50,9 +50,33 @@ class Coinigy
         return $result['success'] ? $result['result'] : $result['error'];
     }
 
-    private function privateRequest($endpoint = 'exchanges', array $parameters = [], $method = 'GET')
+    private function privateGetRequest($endpoint = 'exchanges', $body = '')
     {
+        $timestamp = time();
+        $sign_request = $this->key.$timestamp.'GET'.$this->base_url.$this->private_url.$endpoint.$body;
+        $sign = hash_hmac('sha256', $sign_request, $this->secret);
+
+        $response = $this->client->get($this->private_url.$endpoint, [
+            'headers' => [
+                'X-API-KEY' => $this->key,
+                'X-API-TIMESTAMP' => $timestamp,
+                'X-API-SIGN' => $sign,
+            ]
+        ]);
+
+        $result = json_decode($response->getBody()->getContents(), true);
+
+        return $result['success'] ? $result['result'] : $result['error'];
     }
+
+    /*
+     ***************************************************************************
+     * PUBLIC
+     ***************************************************************************
+     *
+     * Available to anyone, even without a Coinigy Subscription.
+     *
+     */
 
     /**
      * All Blockchains which Coinigy supports.
@@ -126,5 +150,91 @@ class Coinigy
     public function status()
     {
         return $this->publicGetRequest('status');
+    }
+
+    /*
+     ***************************************************************************
+     * PRIVATE - Exchanges & Markets
+     ***************************************************************************
+     *
+     * Supported exchanges and trading pairs.
+     *
+     */
+
+    /**
+     * All Exchanges listed on Coinigy.
+     *
+     * @return array
+     */
+    public function getExchanges()
+    {
+        return $this->privateGetRequest('exchanges');
+    }
+
+    /**
+     * A specific exchange listed on Coinigy.
+     *
+     * @param string $exchCode
+     * @return array
+     */
+    public function getExchange($exchCode = 'BITS')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode);
+    }
+
+    /**
+     * Info about a given currency.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @return array
+     */
+    public function getCurrency($exchCode = 'BITS', $baseCurrCode = 'BTC')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/'.$baseCurrCode);
+    }
+
+    /**
+     * Trading Pair detail info for a given trading pair.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return array
+     */
+    public function getExchangeMarket($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode);
+    }
+
+    /**
+     * All trading pairs that are no longer actively traded on a given exchange
+     *
+     * @param string $exchCode
+     * @return array
+     */
+    public function getExchangeDeadMarkets($exchCode = 'BITS')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/dead');
+    }
+
+    /**
+     * All traiding pairs listed on Coinigy
+     *
+     * @return array
+     */
+    public function getMarkets()
+    {
+        return $this->privateGetRequest('markets');
+    }
+
+    /**
+     * All trading pairs that are no longer actively traded
+     *
+     * @return array
+     */
+    public function getDeadMarkets()
+    {
+        return $this->privateGetRequest('markets/dead');
     }
 }
