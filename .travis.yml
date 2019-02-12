@@ -8,11 +8,13 @@ notifications:
         on_failure: always
 
 php:
-  - 7.1.3
+  - 7.0.0
+  - 7.1
   - 7.2
+  - 7.3
 
 env:
-  - LARAVEL_VERSION=5.7.*
+  - LARAVEL_VERSION=5.5.*
 
 before_install:
   - travis_retry composer self-update --stable -n
