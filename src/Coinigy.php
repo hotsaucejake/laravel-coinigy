@@ -61,7 +61,7 @@ class Coinigy
                 'X-API-KEY' => $this->key,
                 'X-API-TIMESTAMP' => $timestamp,
                 'X-API-SIGN' => $sign,
-            ]
+            ],
         ]);
 
         $result = json_decode($response->getBody()->getContents(), true);
@@ -208,7 +208,7 @@ class Coinigy
     }
 
     /**
-     * All trading pairs that are no longer actively traded on a given exchange
+     * All trading pairs that are no longer actively traded on a given exchange.
      *
      * @param string $exchCode
      * @return array
@@ -219,7 +219,7 @@ class Coinigy
     }
 
     /**
-     * All traiding pairs listed on Coinigy
+     * All traiding pairs listed on Coinigy.
      *
      * @return array
      */
@@ -229,7 +229,7 @@ class Coinigy
     }
 
     /**
-     * All trading pairs that are no longer actively traded
+     * All trading pairs that are no longer actively traded.
      *
      * @return array
      */
