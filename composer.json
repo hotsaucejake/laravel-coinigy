@@ -1,0 +1,54 @@
+{
+  "name": "hotsaucejake/laravel-coinigy",
+  "description": "A laravel package for Coinigy API v2",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "coinigy",
+    "api"
+  ],
+  "type": "library",
+  "authors": [
+    {
+      "name": "hotsaucejake",
+      "email": "get@hotsaucejake.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "guzzlehttp/guzzle": "^6.3",
+    "illuminate/support": "~5.7.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "~3.7.0",
+    "phpunit/phpunit": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "hotsaucejake\\Coinigy\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "hotsaucejake\\Coinigy\\Tests\\": "tests"
+    },
+    "files": [
+      "vendor/phpunit/phpunit/src/Framework/Assert/Functions.php"
+    ]
+  },
+  "scripts": {
+    "phpunit": "phpunit"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "hotsaucejake\\Coinigy\\ServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}
