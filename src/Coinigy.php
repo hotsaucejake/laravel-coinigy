@@ -52,11 +52,10 @@ class Coinigy
 
     private function privateRequest($endpoint = 'exchanges', array $parameters = [], $method = 'GET')
     {
-
     }
 
     /**
-     * All Blockchains which Coinigy supports
+     * All Blockchains which Coinigy supports.
      *
      * @return array
      */
@@ -66,7 +65,7 @@ class Coinigy
     }
 
     /**
-     * Convert one currency value to any other currency
+     * Convert one currency value to any other currency.
      *
      * @param string $fromCurrCode
      * @param string $toCurrCode
@@ -78,7 +77,7 @@ class Coinigy
     }
 
     /**
-     * All Exchanges listed on Coinigy
+     * All Exchanges listed on Coinigy.
      *
      * @return array
      */
@@ -88,7 +87,7 @@ class Coinigy
     }
 
     /**
-     * A specific exchange listed on Coinigy
+     * A specific exchange listed on Coinigy.
      *
      * @param string $exchCode
      * @return array
@@ -99,7 +98,7 @@ class Coinigy
     }
 
     /**
-     * All markets on a given exchange
+     * All markets on a given exchange.
      *
      * @param string $exchCode
      * @return array
@@ -110,7 +109,7 @@ class Coinigy
     }
 
     /**
-     * All trading pairs listed on Coinigy
+     * All trading pairs listed on Coinigy.
      *
      * @return array
      */
@@ -120,7 +119,7 @@ class Coinigy
     }
 
     /**
-     * Status of Coinigy v2 API
+     * Status of Coinigy v2 API.
      *
      * @return array
      */
