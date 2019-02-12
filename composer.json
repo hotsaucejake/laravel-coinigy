@@ -44,7 +44,10 @@
     "laravel": {
       "providers": [
         "hotsaucejake\\Coinigy\\ServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "Coinigy": "hotsaucejake\\Coinigy\\Facade"
+      }
     }
   },
   "config": {
