@@ -16,21 +16,19 @@ Install via composer
 composer require hotsaucejake/laravel-coinigy
 ```
 
-### Register Service Provider
+### Register Service Provider and Facade
 
-**Note! This and next step are optional if you use laravel>=5.5 with package
-auto discovery feature.**
+**Note!  This package has only been tested with Laravel 5.5+, the next section is optional as it includes auto discovery.**
+If you're using Laravel <= 5.4 you'll need to:
 
 Add service provider to `config/app.php` in `providers` section
 ```php
 hotsaucejake\Coinigy\ServiceProvider::class,
 ```
 
-### Register Facade
-
 Register package facade in `config/app.php` in `aliases` section
 ```php
-hotsaucejake\Coinigy\Facades\Coinigy::class,
+'Coinigy' => hotsaucejake\Coinigy\Facades\Coinigy::class,
 ```
 
 ### Publish Configuration File
@@ -41,7 +39,70 @@ php artisan vendor:publish --provider="hotsaucejake\Coinigy\ServiceProvider" --t
 
 ## Usage
 
-Coming soon
+```php
+use hotsaucejake\Coinigy\Facades\Coinigy;
+
+/*
+ ***************************************************************************
+ * PUBLIC
+ ***************************************************************************
+ *
+ * Available to anyone, even without a Coinigy Subscription.
+ *
+ */
+
+// All Blockchains which Coinigy supports.
+Coinigy::chains();
+
+// Convert one currency value to any other currency.
+Coinigy::convert('BTC', 'ETH');
+
+// All Exchanges listed on Coinigy.
+Coinigy::exchanges();
+
+// A specific exchange listed on Coinigy.
+Coinigy::exchange('BITS');
+
+// All markets on a given exchange.
+Coinigy::exchangeMarkets('BITS')
+
+// All trading pairs listed on Coinigy.
+Coinigy::markets();
+
+// Status of Coinigy v2 API.
+Coinigy::status();
+
+/*
+ ***************************************************************************
+ * PRIVATE - Exchanges & Markets
+ ***************************************************************************
+ *
+ * Supported exchanges and trading pairs.
+ *
+ */
+
+// All Exchanges listed on Coinigy.
+Coinigy::getExchanges();
+
+// A specific exchange listed on Coinigy.
+Coinigy::getExchange('BITS');
+
+// Info about a given currency.
+Coinigy::getCurrency('BITS', 'BTC');
+
+// Trading Pair detail info for a given trading pair.
+Coinigy::getExchangeMarket('BITS', 'BTC', 'USD');
+
+// All trading pairs that are no longer actively traded on a given exchange.
+Coinigy::getExchangeDeadMarkets('BITS');
+
+// All traiding pairs listed on Coinigy.
+Coinigy::getMarkets();
+
+// All trading pairs that are no longer actively traded.
+Coinigy::getDeadMarkets();
+
+```
 
 ## Security
 
@@ -52,6 +113,3 @@ instead of using the issue tracker.
 
 - [hotsaucejake](https://github.com/hotsaucejake/laravel-coinigy)
 - [All contributors](https://github.com/hotsaucejake/laravel-coinigy/graphs/contributors)
-
-This package is bootstrapped with the help of
-[melihovv/laravel-package-generator](https://github.com/melihovv/laravel-package-generator).
