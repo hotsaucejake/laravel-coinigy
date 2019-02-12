@@ -4,7 +4,7 @@ namespace hotsaucejake\Coinigy;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    const CONFIG_PATH = __DIR__ . '/../config/laravel-coinigy.php';
+    const CONFIG_PATH = __DIR__.'/../config/laravel-coinigy.php';
 
     public function boot()
     {

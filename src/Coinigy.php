@@ -4,5 +4,4 @@ namespace hotsaucejake\Coinigy;
 
 class Coinigy
 {
-    
 }
