@@ -50,10 +50,10 @@ class Coinigy
         return $result['success'] ? $result['result'] : $result['error'];
     }
 
-    private function privateGetRequest($endpoint = 'exchanges', $body = '')
+    private function privateGetRequest($endpoint = 'exchanges', $params = [])
     {
         $timestamp = time();
-        $sign_request = $this->key.$timestamp.'GET'.$this->base_url.$this->private_url.$endpoint.$body;
+        $sign_request = $this->key.$timestamp.'GET'.$this->base_url.$this->private_url.$endpoint;
         $sign = hash_hmac('sha256', $sign_request, $this->secret);
 
         $response = $this->client->get($this->private_url.$endpoint, [
@@ -236,5 +236,166 @@ class Coinigy
     public function getDeadMarkets()
     {
         return $this->privateGetRequest('markets/dead');
+    }
+
+    /*
+     ***************************************************************************
+     * PRIVATE - Exchange Data
+     ***************************************************************************
+     *
+     * Trade history, order books, market data, news, etc.
+     *
+     */
+
+    /**
+     * Orderbook depth for a given trading pair.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return array
+     */
+    public function getOrderBookDepth($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/depth');
+    }
+
+    /**
+     * Price of last trade on a given market.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return array
+     */
+    public function getLastTrade($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/last');
+    }
+
+    /**
+     * OHLC candlestick data for a given trading pair and interval.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @param string $period
+     * @return array
+     */
+    public function getCandlestick($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $period = '1d', $params = ['StartDate' => '2019-02-11T17:02:38.623Z', 'EndDate' => '2019-02-12T17:02:38.623Z'])
+    {
+        // return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ohlc/'.$period);
+        // requires query string
+        return false;
+    }
+
+    /**
+     * Historical price ranges for a given trading pair.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return array
+     */
+    public function getRange($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/range');
+    }
+
+    /**
+     * 24-Hour Ticker data for a given trading pair.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return void
+     */
+    public function getTicker($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ticker');
+    }
+
+    /**
+     * Recent trades for a given pair.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return array
+     */
+    public function getTrades($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades');
+    }
+
+    /**
+     * Trade history for a given trading pair.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return array
+     */
+    public function getTradeHistory($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        // return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history');
+        // requires query string
+        return false;
+    }
+
+    /**
+     * Trade history for a given trading pair since a given ID.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @param long $sinceMarketHistoryId
+     * @return array
+     */
+    public function getTradeHistorySince($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $sinceMarketHistoryId)
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history/'.$sinceMarketHistoryId);
+    }
+
+    /**
+     * 24-Hour Ticker data for all trading pairs on a given exchange.
+     *
+     * @param string $exchCode
+     * @return array
+     */
+    public function getExchangeTicker($exchCode = 'BITS')
+    {
+        return $this->privateGetRequest('exchanges/'.$exchCode.'/ticker');
+    }
+
+    /**
+     * Ticker data for all trading pairs listed on Coinigy.
+     *
+     * @return array
+     */
+    public function getMarketTicker()
+    {
+        return $this->privateGetRequest('markets/ticker');
+    }
+
+    /**
+     * Recent articles from Coinigy's news feed.
+     *
+     * @return array
+     */
+    public function news()
+    {
+        return $this->privateGetRequest('news');
+    }
+
+    /**
+     * Search articles from Coinigy's news feed.
+     *
+     * @param string $searchTerm
+     * @return array
+     */
+    public function newsSearch($searchTerm = 'bullbearanalytics.com')
+    {
+        return $this->privateGetRequest('news/'.$searchTerm);
     }
 }
