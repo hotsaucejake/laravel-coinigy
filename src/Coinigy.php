@@ -398,4 +398,33 @@ class Coinigy
     {
         return $this->privateRequest('GET', 'news/'.$searchTerm);
     }
+
+    /*
+     ***************************************************************************
+     * PRIVATE - Price Alerts
+     ***************************************************************************
+     *
+     * Open and triggered price alerts.
+     *
+     */
+
+    /**
+     * All open price alerts
+     *
+     * @return array
+     */
+    public function getAlerts()
+    {
+        return $this->privateRequest('GET', 'user/alerts');
+    }
+
+    /**
+     * Previously triggered price alerts.
+     *
+     * @return array
+     */
+    public function getAlertHistory()
+    {
+        return $this->privateRequest('GET', 'user/alerts/history');
+    }
 }
