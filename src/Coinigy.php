@@ -352,7 +352,7 @@ class Coinigy
      * @param long $sinceMarketHistoryId
      * @return array
      */
-    public function getTradeHistorySince($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $sinceMarketHistoryId)
+    public function getTradeHistorySince($exchCode, $baseCurrCode, $quoteCurrCode, $sinceMarketHistoryId)
     {
         return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history/'.$sinceMarketHistoryId);
     }
