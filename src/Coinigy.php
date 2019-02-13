@@ -50,13 +50,13 @@ class Coinigy
         return $result['success'] ? $result['result'] : $result['error'];
     }
 
-    private function privateGetRequest($endpoint = 'exchanges', $params = [])
+    private function privateRequest($method = 'GET', $endpoint = 'exchanges', $params = [], $body = '')
     {
         $timestamp = time();
-        $sign_request = $this->key.$timestamp.'GET'.$this->base_url.$this->private_url.$endpoint;
+        $sign_request = $this->key.$timestamp.$method.$this->base_url.$this->private_url.$endpoint.$body;
         $sign = hash_hmac('sha256', $sign_request, $this->secret);
 
-        $response = $this->client->get($this->private_url.$endpoint, [
+        $response = $this->client->request($method, $this->private_url.$endpoint, [
             'headers' => [
                 'X-API-KEY' => $this->key,
                 'X-API-TIMESTAMP' => $timestamp,
@@ -168,7 +168,7 @@ class Coinigy
      */
     public function getExchanges()
     {
-        return $this->privateGetRequest('exchanges');
+        return $this->privateRequest('GET', 'exchanges');
     }
 
     /**
@@ -179,7 +179,7 @@ class Coinigy
      */
     public function getExchange($exchCode = 'BITS')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode);
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode);
     }
 
     /**
@@ -191,7 +191,7 @@ class Coinigy
      */
     public function getCurrency($exchCode = 'BITS', $baseCurrCode = 'BTC')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/'.$baseCurrCode);
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/'.$baseCurrCode);
     }
 
     /**
@@ -204,7 +204,7 @@ class Coinigy
      */
     public function getExchangeMarket($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode);
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode);
     }
 
     /**
@@ -215,7 +215,7 @@ class Coinigy
      */
     public function getExchangeDeadMarkets($exchCode = 'BITS')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/dead');
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/dead');
     }
 
     /**
@@ -225,7 +225,7 @@ class Coinigy
      */
     public function getMarkets()
     {
-        return $this->privateGetRequest('markets');
+        return $this->privateRequest('GET', 'markets');
     }
 
     /**
@@ -235,7 +235,7 @@ class Coinigy
      */
     public function getDeadMarkets()
     {
-        return $this->privateGetRequest('markets/dead');
+        return $this->privateRequest('GET', 'markets/dead');
     }
 
     /*
@@ -257,7 +257,7 @@ class Coinigy
      */
     public function getOrderBookDepth($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/depth');
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/depth');
     }
 
     /**
@@ -270,7 +270,7 @@ class Coinigy
      */
     public function getLastTrade($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/last');
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/last');
     }
 
     /**
@@ -284,7 +284,7 @@ class Coinigy
      */
     public function getCandlestick($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $period = '1d', $params = ['StartDate' => '2019-02-11T17:02:38.623Z', 'EndDate' => '2019-02-12T17:02:38.623Z'])
     {
-        // return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ohlc/'.$period);
+        // return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ohlc/'.$period);
         // requires query string
         return false;
     }
@@ -299,7 +299,7 @@ class Coinigy
      */
     public function getRange($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/range');
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/range');
     }
 
     /**
@@ -312,7 +312,7 @@ class Coinigy
      */
     public function getTicker($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ticker');
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ticker');
     }
 
     /**
@@ -325,7 +325,7 @@ class Coinigy
      */
     public function getTrades($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades');
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades');
     }
 
     /**
@@ -338,7 +338,7 @@ class Coinigy
      */
     public function getTradeHistory($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
-        // return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history');
+        // return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history');
         // requires query string
         return false;
     }
@@ -354,7 +354,7 @@ class Coinigy
      */
     public function getTradeHistorySince($exchCode, $baseCurrCode, $quoteCurrCode, $sinceMarketHistoryId)
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history/'.$sinceMarketHistoryId);
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history/'.$sinceMarketHistoryId);
     }
 
     /**
@@ -365,7 +365,7 @@ class Coinigy
      */
     public function getExchangeTicker($exchCode = 'BITS')
     {
-        return $this->privateGetRequest('exchanges/'.$exchCode.'/ticker');
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/ticker');
     }
 
     /**
@@ -375,7 +375,7 @@ class Coinigy
      */
     public function getMarketTicker()
     {
-        return $this->privateGetRequest('markets/ticker');
+        return $this->privateRequest('GET', 'markets/ticker');
     }
 
     /**
@@ -385,7 +385,7 @@ class Coinigy
      */
     public function news()
     {
-        return $this->privateGetRequest('news');
+        return $this->privateRequest('GET', 'news');
     }
 
     /**
@@ -396,6 +396,6 @@ class Coinigy
      */
     public function newsSearch($searchTerm = 'bullbearanalytics.com')
     {
-        return $this->privateGetRequest('news/'.$searchTerm);
+        return $this->privateRequest('GET', 'news/'.$searchTerm);
     }
 }
