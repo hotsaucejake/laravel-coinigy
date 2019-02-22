@@ -52,7 +52,7 @@ class Coinigy
 
     private function privateRequest($method = 'GET', $endpoint = 'exchanges', $body = '', $params = [])
     {
-        !empty($params) ? $query = urldecode('?' . http_build_query($params)) : $query = '';
+        ! empty($params) ? $query = urldecode('?'.http_build_query($params)) : $query = '';
 
         $timestamp = time();
         $sign_request = $this->key.$timestamp.$method.$this->base_url.$this->private_url.$endpoint.$body;
@@ -430,11 +430,11 @@ class Coinigy
      */
     public function postAlert($exchCode = 'BITS', $marketName = 'USD/BTC', $price = 100.00, $alertNote = 'Trade Alert!', $alertSound = null)
     {
-        $body = array('exchCode' => $exchCode,
+        $body = ['exchCode' => $exchCode,
                         'marketName' => $marketName,
                         'price' => number_format($price, 8, '.', ''),
                         'alertNote' => $alertNote,
-                        'alertSound' => $alertSound);
+                        'alertSound' => $alertSound, ];
 
         return $this->privateRequest('POST', 'user/alerts', json_encode($body));
     }
@@ -442,8 +442,8 @@ class Coinigy
     /**
      * Remove an existing price alert.
      *
-     * @param integer $alertId
-     * @return boolean
+     * @param int $alertId
+     * @return bool
      */
     public function deleteAlert($alertId = 11992352)
     {
@@ -453,7 +453,7 @@ class Coinigy
     /**
      * Info about a specific price alert.
      *
-     * @param integer $alertId
+     * @param int $alertId
      * @return array
      */
     public function getAlert($alertId = 11992352)
@@ -466,7 +466,7 @@ class Coinigy
      * Existing alert will be removed and a new alert for the same Exchange/Market will be added
      * The alert sound and alert note will only be updated if provided. Otherwise they will remain the same.
      *
-     * @param integer $alertId
+     * @param int $alertId
      * @param float $price
      * @param string $alertNote
      * @param string $alertSound
@@ -474,9 +474,9 @@ class Coinigy
      */
     public function updateAlert($alertId = 11992352, $price = 200.00, $alertNote = null, $alertSound = null)
     {
-        $body = array('price' => number_format($price, 8, '.', ''),
+        $body = ['price' => number_format($price, 8, '.', ''),
                         'alertNote' => $alertNote,
-                        'alertSound' => $alertSound);
+                        'alertSound' => $alertSound, ];
 
         return $this->privateRequest('PUT', 'user/alerts/'.$alertId, json_encode($body));
     }
@@ -486,7 +486,7 @@ class Coinigy
      *
      * @param string $baseCurrCode
      * @param string $quoteCurrCode
-     * @return boolean
+     * @return bool
      */
     public function deletePairAlerts($baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
@@ -494,10 +494,10 @@ class Coinigy
     }
 
     /**
-     * Remove all open price alerts for a specific exchange
+     * Remove all open price alerts for a specific exchange.
      *
      * @param string $exchCode
-     * @return boolean
+     * @return bool
      */
     public function deleteExchangeAlerts($exchCode = 'BITS')
     {
@@ -513,7 +513,7 @@ class Coinigy
      * @param string $exchCode
      * @param string $baseCurrCode
      * @param string $quoteCurrCode
-     * @return boolean
+     * @return bool
      */
     public function deleteExchangePairAlerts($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
     {
