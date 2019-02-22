@@ -50,18 +50,22 @@ class Coinigy
         return $result['success'] ? $result['result'] : $result['error'];
     }
 
-    private function privateRequest($method = 'GET', $endpoint = 'exchanges', $params = [], $body = '')
+    private function privateRequest($method = 'GET', $endpoint = 'exchanges', $body = '', $params = [])
     {
+        !empty($params) ? $query = urldecode('?' . http_build_query($params)) : $query = '';
+
         $timestamp = time();
         $sign_request = $this->key.$timestamp.$method.$this->base_url.$this->private_url.$endpoint.$body;
         $sign = hash_hmac('sha256', $sign_request, $this->secret);
 
-        $response = $this->client->request($method, $this->private_url.$endpoint, [
+        $response = $this->client->request($method, $this->private_url.$endpoint.$query, [
             'headers' => [
                 'X-API-KEY' => $this->key,
                 'X-API-TIMESTAMP' => $timestamp,
                 'X-API-SIGN' => $sign,
+                'Content-Type' => 'application/json',
             ],
+            'body' => $body,
         ]);
 
         $result = json_decode($response->getBody()->getContents(), true);
@@ -282,11 +286,9 @@ class Coinigy
      * @param string $period
      * @return array
      */
-    public function getCandlestick($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $period = '1d', $params = ['StartDate' => '2019-02-11T17:02:38.623Z', 'EndDate' => '2019-02-12T17:02:38.623Z'])
+    public function getCandlestick($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $period = 'm', $params = ['StartDate' => '2019-02-11T17:02:38.623Z', 'EndDate' => '2019-02-12T18:02:38.623Z'])
     {
-        // return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ohlc/'.$period);
-        // requires query string
-        return false;
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ohlc/'.$period, '', $params);
     }
 
     /**
@@ -336,11 +338,9 @@ class Coinigy
      * @param string $quoteCurrCode
      * @return array
      */
-    public function getTradeHistory($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    public function getTradeHistory($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $params = ['StartDate' => '2019-02-12T17:02:38.623Z', 'EndDate' => '2019-02-12T18:02:38.623Z'])
     {
-        // return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history');
-        // requires query string
-        return false;
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history', '', $params);
     }
 
     /**
@@ -416,6 +416,108 @@ class Coinigy
     public function getAlerts()
     {
         return $this->privateRequest('GET', 'user/alerts');
+    }
+
+    /**
+     * Insert a new price alert.
+     *
+     * @param string $exchCode
+     * @param string $marketName
+     * @param float $price
+     * @param string $alertNote
+     * @param string $alertSound
+     * @return array
+     */
+    public function postAlert($exchCode = 'BITS', $marketName = 'USD/BTC', $price = 100.00, $alertNote = 'Trade Alert!', $alertSound = null)
+    {
+        $body = array('exchCode' => $exchCode,
+                        'marketName' => $marketName,
+                        'price' => number_format($price, 8, '.', ''),
+                        'alertNote' => $alertNote,
+                        'alertSound' => $alertSound);
+
+        return $this->privateRequest('POST', 'user/alerts', json_encode($body));
+    }
+
+    /**
+     * Remove an existing price alert.
+     *
+     * @param integer $alertId
+     * @return boolean
+     */
+    public function deleteAlert($alertId = 11992352)
+    {
+        return $this->privateRequest('DELETE', 'user/alerts/'.$alertId);
+    }
+
+    /**
+     * Info about a specific price alert.
+     *
+     * @param integer $alertId
+     * @return array
+     */
+    public function getAlert($alertId = 11992352)
+    {
+        return $this->privateRequest('GET', 'user/alerts/'.$alertId);
+    }
+
+    /**
+     * Change an existing price alert.
+     * Existing alert will be removed and a new alert for the same Exchange/Market will be added
+     * The alert sound and alert note will only be updated if provided. Otherwise they will remain the same.
+     *
+     * @param integer $alertId
+     * @param float $price
+     * @param string $alertNote
+     * @param string $alertSound
+     * @return array
+     */
+    public function updateAlert($alertId = 11992352, $price = 200.00, $alertNote = null, $alertSound = null)
+    {
+        $body = array('price' => number_format($price, 8, '.', ''),
+                        'alertNote' => $alertNote,
+                        'alertSound' => $alertSound);
+
+        return $this->privateRequest('PUT', 'user/alerts/'.$alertId, json_encode($body));
+    }
+
+    /**
+     * Remove all open price alerts for a specific market/trading pair.
+     *
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return boolean
+     */
+    public function deletePairAlerts($baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        return $this->privateRequest('DELETE', 'user/alerts/'.$baseCurrCode.'/'.$quoteCurrCode);
+    }
+
+    /**
+     * Remove all open price alerts for a specific exchange
+     *
+     * @param string $exchCode
+     * @return boolean
+     */
+    public function deleteExchangeAlerts($exchCode = 'BITS')
+    {
+        // does not work - probably conflicts with deleteAlert() - has same endpoint
+        // contact Coinigy about this
+        // return $this->privateRequest('DELETE', 'user/alerts/'.$exchCode);
+        return false;
+    }
+
+    /**
+     * Remove all open price alerts for a specific exchange and market/trading pair.
+     *
+     * @param string $exchCode
+     * @param string $baseCurrCode
+     * @param string $quoteCurrCode
+     * @return boolean
+     */
+    public function deleteExchangePairAlerts($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD')
+    {
+        return $this->privateRequest('DELETE', 'user/alerts/'.$exchCode.'/'.$baseCurrCode.'/'.$quoteCurrCode);
     }
 
     /**

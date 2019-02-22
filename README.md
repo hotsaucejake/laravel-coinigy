@@ -120,8 +120,7 @@ Coinigy::getOrderBookDepth('BITS', 'BTC', 'USD');
 Coinigy::getLastTrade('BITS', 'BTC', 'USD');
 
 // OHLC candlestick data for a given trading pair and interval.
-// Coinigy::getCandlestick('BITS', 'BTC', 'USD', '1d', ['StartDate' => '2019-02-11T17:02:38.623Z', 'EndDate' => '2019-02-12T17:02:38.623Z']);
-// returns false - needs to be fixed with parameters
+Coinigy::getCandlestick('BITS', 'BTC', 'USD', 'm', ['StartDate' => '2019-02-11T16:02:38.623Z', 'EndDate' => '2019-02-12T17:02:38.623Z']);
 
 // Historical price ranges for a given trading pair.
 Coinigy::getRange('BITS', 'BTC', 'USD');
@@ -133,8 +132,7 @@ Coinigy::getTicker('BITS', 'BTC', 'USD');
 Coinigy::getTrades('BITS', 'BTC', 'USD');
 
 // Trade history for a given trading pair.
-// Coinigy::getTradeHistory('BITS', 'BTC', 'USD');
-// returns false - needs to be fixed with parameters
+Coinigy::getTradeHistory('BITS', 'BTC', 'USD', ['StartDate' => '2019-02-12T17:02:38.623Z', 'EndDate' => '2019-02-12T18:02:38.623Z']);
 
 // Trade history for a given trading pair since a given ID.
 Coinigy::getTradeHistorySince('BITS', 'BTC', 'USD', $sinceMarketHistoryId);
@@ -150,6 +148,49 @@ Coinigy::news();
 
 // Search articles from Coinigy's news feed.
 Coinigy::newsSearch('bullbearanalytics.com'); // searches titles only
+
+/*
+ ***************************************************************************
+ * PRIVATE - Price Alerts
+ ***************************************************************************
+ *
+ * Open and triggered price alerts.
+ *
+ */
+
+// All open price alerts
+Coinigy::getAlerts();
+
+// Insert a new price alert.
+Coinigy::postAlert('BITS', 'USD/BTC', 100.00);
+Coinigy::postAlert('BITS', 'USD/BTC', 100.00, 'Trade Alert!');
+
+// Remove an existing price alert.
+Coinigy::deleteAlert(11992352);
+
+// Info about a specific price alert.
+Coinigy::getAlert(11992352);
+
+// Change an existing price alert.
+// Existing alert will be removed and a new alert for the same Exchange/Market will be added
+// The alert sound and alert note will only be updated if provided. Otherwise they will remain the same.
+Coinigy::updateAlert(11992352, 200.00);
+Coinigy::updateAlert(11992352, 200.00, 'New Alert Note!');
+
+// Remove all open price alerts for a specific market/trading pair.
+Coinigy::deletePairAlerts('BTC', 'USD');
+
+// Remove all open price alerts for a specific exchange.
+// Coinigy::deleteExchangeAlerts('BITS');
+// returns false
+// does not work - probably conflicts with deleteAlert() - has the same endpoint
+// contact Coinigy about this
+
+// Remove all open price alerts for a specific exchange and market/trading pair.
+Coinigy::deleteExchangePairAlerts('BITS', 'BTC', 'USD');
+
+// Previously triggered price alerts.
+Coinigy::getAlertHistory();
 
 
 ```
