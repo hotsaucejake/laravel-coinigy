@@ -48,4 +48,4 @@ install:
   - composer update
 
 script:
-  - vendor/phpunit/phpunit/phpunit
+  - vendor/bin/phpunit
