@@ -44,4 +44,4 @@ install:
   - composer update
 
 script:
-  - phpunit
+  - vendor/phpunit/phpunit/phpunit
