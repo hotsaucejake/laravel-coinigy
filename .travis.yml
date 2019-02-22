@@ -44,4 +44,4 @@ install:
   - composer update
 
 script:
-  - composer run phpunit -- --coverage-clover ./tests/logs/clover.xml
+  - phpunit
