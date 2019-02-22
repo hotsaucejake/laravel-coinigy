@@ -21,7 +21,7 @@
     "laravel/framework": ">=5.4"
   },
   "require-dev": {
-    "orchestra/testbench": "~3.5",
+    "orchestra/testbench": "~3.4",
     "phpunit/phpunit": ">=6.0"
   },
   "autoload": {
