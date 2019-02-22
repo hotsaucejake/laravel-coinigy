@@ -409,7 +409,7 @@ class Coinigy
      */
 
     /**
-     * All open price alerts
+     * All open price alerts.
      *
      * @return array
      */
