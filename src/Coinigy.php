@@ -37,7 +37,7 @@ class Coinigy
         $this->public_url = array_get($urls, 'public');
         $this->private_url = array_get($urls, 'private');
 
-        $this->client = $this->client = new Client([
+        $this->client = new Client([
             'base_uri' => $this->api_url.$this->base_url,
         ]);
     }
