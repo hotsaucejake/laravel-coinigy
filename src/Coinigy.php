@@ -50,15 +50,13 @@ class Coinigy
         return $result['success'] ? $result['result'] : $result['error'];
     }
 
-    private function privateRequest($method = 'GET', $endpoint = 'exchanges', $body = '', $params = [])
+    private function privateRequest($method = 'GET', $endpoint = 'exchanges', $body = null, $params = [])
     {
-        ! empty($params) ? $query = urldecode('?'.http_build_query($params)) : $query = '';
-
         $timestamp = time();
         $sign_request = $this->key.$timestamp.$method.$this->base_url.$this->private_url.$endpoint.$body;
         $sign = hash_hmac('sha256', $sign_request, $this->secret);
 
-        $response = $this->client->request($method, $this->private_url.$endpoint.$query, [
+        $response = $this->client->request($method, $this->private_url.$endpoint, [
             'headers' => [
                 'X-API-KEY' => $this->key,
                 'X-API-TIMESTAMP' => $timestamp,
@@ -66,6 +64,7 @@ class Coinigy
                 'Content-Type' => 'application/json',
             ],
             'body' => $body,
+            'query' => $params,
         ]);
 
         $result = json_decode($response->getBody()->getContents(), true);
@@ -288,7 +287,7 @@ class Coinigy
      */
     public function getCandlestick($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $period = 'm', $params = ['StartDate' => '2019-02-11T17:02:38.623Z', 'EndDate' => '2019-02-12T18:02:38.623Z'])
     {
-        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ohlc/'.$period, '', $params);
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/ohlc/'.$period, null, $params);
     }
 
     /**
@@ -340,7 +339,7 @@ class Coinigy
      */
     public function getTradeHistory($exchCode = 'BITS', $baseCurrCode = 'BTC', $quoteCurrCode = 'USD', $params = ['StartDate' => '2019-02-12T17:02:38.623Z', 'EndDate' => '2019-02-12T18:02:38.623Z'])
     {
-        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history', '', $params);
+        return $this->privateRequest('GET', 'exchanges/'.$exchCode.'/markets/'.$baseCurrCode.'/'.$quoteCurrCode.'/trades/history', null, $params);
     }
 
     /**
