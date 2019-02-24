@@ -528,4 +528,46 @@ class Coinigy
     {
         return $this->privateRequest('GET', 'user/alerts/history');
     }
+
+    /*
+     ***************************************************************************
+     * PRIVATE - Blockchain Data
+     ***************************************************************************
+     *
+     * Supported chains, current metrics and blockchain metric history.
+     *
+     */
+
+    /**
+     * All blockchains which Coinigy supports.
+     *
+     * @return array
+     */
+    public function getChains()
+    {
+        return $this->privateRequest('GET', 'chains');
+    }
+
+    /**
+     * Blockchain metrics about the most recent block of a specific blockchain.
+     *
+     * @param string $chainCurr
+     * @return array
+     */
+    public function getChain($chainCurr = 'BTC')
+    {
+        return $this->privateRequest('GET', 'chains/'.$chainCurr);
+    }
+
+    /**
+     * Historical blockchain metrics about a specific blockchain.
+     *
+     * @param string $chainCurr
+     * @param array $params
+     * @return array
+     */
+    public function getChainHistory($chainCurr = 'BTC', $params = ['StartDate' => '2009-01-01T17:02:38.623Z', 'EndDate' => '2019-02-12T18:02:38.623Z'])
+    {
+        return $this->privateRequest('GET', 'chains/'.$chainCurr.'/history', null, $params);
+    }
 }

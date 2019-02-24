@@ -192,6 +192,24 @@ Coinigy::deleteExchangePairAlerts('BITS', 'BTC', 'USD');
 // Previously triggered price alerts.
 Coinigy::getAlertHistory();
 
+/*
+ ***************************************************************************
+ * PRIVATE - Blockchain Data
+ ***************************************************************************
+ *
+ * Supported chains, current metrics and blockchain metric history.
+ *
+ */
+
+// All blockchains which Coinigy supports.
+Coinigy::getChains();
+
+// Blockchain metrics about the most recent block of a specific blockchain.
+Coinigy::getChain('BTC');
+
+// Historical blockchain metrics about a specific blockchain.
+Coinigy::getChainHistory('BTC', ['StartDate' => '2019-02-10T17:02:38.623Z', 'EndDate' => '2019-02-12T18:02:38.623Z']);
+
 
 ```
 
